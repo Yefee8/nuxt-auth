@@ -48,7 +48,8 @@ export default {
     },
     watch: {
         response(newValue, oldValue) {
-            if (newValue.status) {
+            console.log(newValue);
+            if (typeof newValue.status !== undefined) {
                 if (newValue.status === 'succeed') {
                     alert('Signed In 🚀');
                     localStorage.setItem('userKey', newValue.key);

@@ -23,18 +23,20 @@ export default {
           const { data } = useFetch(`/api/getuserkey?userkey=${localStorage.getItem('userKey')}`);
           this.response = data;
         }
-      }, 250)
+      }, 1000)
     }
   },
 
   watch: {
     response(newValue, oldValue) {
-      if (newValue.status) {
-        if (newValue.status === 'wrong') {
-          localStorage.setItem('userKey', '');
-        }
-        else {
-          this.$router.push('/home')
+      if (newValue) {
+        if (newValue.status) {
+          if (newValue.status === 'wrong') {
+            localStorage.setItem('userKey', '');
+          }
+          else {
+            this.$router.push('/home')
+          }
         }
       }
     }

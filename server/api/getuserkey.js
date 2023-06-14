@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
     const { userkey } = getQuery(event);
 
-    const data = await $fetch(`https://expressjs-server-production-4dda.up.railway.app/checkuser?userkey=${userkey}`, { method: 'GET' });
+    const data = await $fetch(`https://express-auth-yefee-production-e5a1.up.railway.app/checkuser?userkey=${userkey}`, { method: 'GET' });
 
     if (data.status === 'true') {
         return { status: 'true'}
