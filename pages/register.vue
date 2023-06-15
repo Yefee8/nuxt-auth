@@ -1,67 +1,49 @@
 <template>
     <div class="center">
 
-        <div :class="`loading`" id="loading">
+        <div class="loading" :class="{
+            active: isLoading
+        }">
             <div class="spinner"></div>
         </div>
-        <div class="card">
+
+        <form class="card" @submit.prevent="onSubmit()">
             <h1>Sign In</h1>
-            <Input @change="(e) => usernameChanged(e)" type="text" placeholder="Username" />
-            <Input @change="(e) => passwordChanged(e)" type="password" placeholder="Password" />
-            <Button @clicked="sign(signIn(username.target.value, password.target.value))">Sign In</Button>
-        </div>
+            <Input v-model="user.username" type="text" placeholder="Username" />
+            <Input v-model="user.password" type="password" placeholder="Password" />
+            <Button>Sign In</Button>
+        </form>
     </div>
 </template>
 
 
-<script setup>
+<script setup lang="js">
+const router = useRouter()
 
-const signIn = (username, password) => {
-    const { data } = useFetch(`/api/signin?username=${username}&password=${password}`);
+const user = reactive({
+    username: '',
+    password: ''
+});
 
-    return data;
-}
-</script>
+const isLoading = ref(false);
 
-<script>
+const onSubmit = () => {
+    isLoading.value = true;
 
-export default {
-    methods: {
-        usernameChanged(e) {
-            this.username = e;
-        },
-        passwordChanged(e) {
-            this.password = e;
-        },
-        sign(r) {
-            document.getElementById('loading').classList += ' active';
-            this.response = r;
+    useFetch('/api/signin', {
+        method: 'post',
+        body: user
+    }).then(response => {
+        if (response.data.value.status === 'succeed') {
+            alert('Signed In 🚀');
+            router.push({ path: "/home" });
         }
-    },
 
-    data() {
-        return {
-            username: '',
-            password: '',
-            response: '',
+        else {
+            alert('Username is Already Taken 😟...');
+            router.push({ path: "/" });
         }
-    },
-    watch: {
-        response(newValue, oldValue) {
-            console.log(newValue);
-            if (typeof newValue.status !== undefined) {
-                if (newValue.status === 'succeed') {
-                    alert('Signed In 🚀');
-                    localStorage.setItem('userKey', newValue.key);
-                    this.$router.push({ path: "/home" });
-                }
-                else {
-                    alert('This username is already taken 😟...');
-                    this.$router.push({ path: "/" });
-                }
-            }
-        }
-    }
+    });
 }
 </script>
 

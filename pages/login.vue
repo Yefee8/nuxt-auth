@@ -1,67 +1,48 @@
 <template>
     <div class="center">
 
-        <div :class="`loading`" id="loading">
+        <div class="loading" :class="{
+            active: isLoading
+        }">
             <div class="spinner"></div>
         </div>
-        <div class="card">
+        <form class="card" @submit.prevent="onSubmit()">
             <h1>Log In</h1>
-            <Input @change="(e) => usernameChanged(e)" type="text" placeholder="Username" />
-            <Input @change="(e) => passwordChanged(e)" type="password" placeholder="Password" />
-            <Button @clicked="log(logIn(username.target.value, password.target.value))">Log In</Button>
-        </div>
+            <Input v-model="user.username" type="text" placeholder="Username" />
+            <Input v-model="user.password" type="password" placeholder="Password" />
+            <Button>Log In</Button>
+        </form>
     </div>
 </template>
 
 
-<script setup>
-const logIn = (username, password) => {
-    const { data } = useFetch(`/api/login?username=${username}&password=${password}`);
+<script setup lang="js">
+const router = useRouter()
 
-    return data;
-}
-</script>
+const user = reactive({
+    username: '',
+    password: ''
+});
 
-<script>
+const isLoading = ref(false);
 
-export default {
-    methods: {
-        usernameChanged(e) {
-            this.username = e;
-        },
-        passwordChanged(e) {
-            this.password = e;
-        },
-        log(r) {
-            document.getElementById('loading').classList += ' active';
-            this.response = r;
+const onSubmit = () => {
+    isLoading.value = true;
+
+    useFetch('/api/login', {
+        method: 'post',
+        body: user
+    }).then(response => {
+        if (response.data.value.status === 'succeed') {
+            alert('Logged In 🚀');
+            router.push({ path: "/home" });
         }
-    },
 
-    data() {
-        return {
-            username: '',
-            password: '',
-            response: '',
+        else {
+            alert('Datas are Wrong 😟...');
+            router.push({ path: "/" });
         }
-    },
-    watch: {
-        response(newValue, oldValue) {
-            if (newValue.status) {
-                console.log(newValue);
-                if (newValue.status === 'succeed') {
-                    alert('Logged In 🚀');
-                    localStorage.setItem('userKey', newValue.key);
-                    this.$router.push({ path: "/home" });
-                }
-
-                else {
-                    alert('Datas are wrong 😟...');
-                    this.$router.push({ path: "/" });
-                }
-            }
-        }
-    }
+    });
 }
 </script>
 

@@ -7,42 +7,6 @@
     </div>
   </div>
 </template>
-  
-<script>
-export default {
-  data() {
-    return {
-      response: true
-    }
-  },
-
-  created() {
-    if (typeof localStorage !== undefined) {
-      setTimeout(() => {
-        if (localStorage.getItem('userKey')) {
-          const { data } = useFetch(`/api/getuserkey?userkey=${localStorage.getItem('userKey')}`);
-          this.response = data;
-        }
-      }, 1000)
-    }
-  },
-
-  watch: {
-    response(newValue, oldValue) {
-      if (newValue) {
-        if (newValue.status) {
-          if (newValue.status === 'wrong') {
-            localStorage.setItem('userKey', '');
-          }
-          else {
-            this.$router.push('/home')
-          }
-        }
-      }
-    }
-  }
-}
-</script>  
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap');
