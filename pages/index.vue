@@ -2,8 +2,8 @@
   <div class="center">
     <h1>Auth App</h1>
     <div class="buttons">
-      <NuxtLink href="/register"><Button>Sign In</Button></NuxtLink>
-      <NuxtLink href="/login"><Button>Log In</Button></NuxtLink>
+      <NuxtLink href="/register"><Button>Sign Up</Button></NuxtLink>
+      <NuxtLink href="/login"><Button>Sign In</Button></NuxtLink>
     </div>
   </div>
 </template>
