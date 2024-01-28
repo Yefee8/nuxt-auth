@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
     const { username, password } = await readBody(event);
 
-    const data = await $fetch(`https://express-auth-yefee-production-e5a1.up.railway.app/register?username=${username}&password=${password}`, { method: 'POST' });
+    const data = await $fetch(`sorryicantsharetheapi.com/register?username=${username}&password=${password}`, { method: 'POST' });
 
     if (data.status === 'succeed') {
         setCookie(event, 'token', data.key, {

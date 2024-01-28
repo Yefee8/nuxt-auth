@@ -1,7 +1,7 @@
 export default defineEventHandler(async (event) => {
     const userToken = getCookie(event, 'token');
 
-    const data = await $fetch(`https://express-auth-yefee-production-e5a1.up.railway.app/checkuser?userkey=${userToken}`, { method: 'GET' });
+    const data = await $fetch(`sorryicantsharetheapi.com/checkuser?userkey=${userToken}`, { method: 'GET' });
 
     if (data.status === 'true') {
         return { status: 'data is true' }
